@@ -1,0 +1,27 @@
+[
+  {
+    "query" : "origin == 'mysql' and name == '/mysql/available' and deployment == 'cf-df12622fdcf2a31199ae' and job == 'mysql,database'",
+    "threshold" : {
+      "critical" : 1.0,
+      "type" : "EQUALITY"
+    },
+    "enabled" : true
+  },
+  {
+    "query" : "origin == 'healthwatch' and name == 'health.check.bosh.director.success'",
+    "threshold" : {
+      "critical" : 1.0,
+      "type" : "EQUALITY"
+    },
+    "enabled" : true
+  },
+  {
+    "query" : "origin == 'healthwatch' and name == 'health.check.OpsMan.available'",
+    "threshold" : {
+      "critical" : 0.5,
+      "warning" : 0.5,
+      "type" : "LOWER"
+    },
+    "enabled" : true
+  }
+]

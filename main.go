@@ -51,18 +51,18 @@ func main() {
 		fmt.Println(err)
 	}
 
-	yamlFile, err := ioutil.ReadFile("hw2_alerting_rules.yml")
-	if err != nil {
-		fmt.Println(err)
-	}
-
 	for _, v := range hw1Alerts {
 		s := v.Query
 		fmt.Printf("Query: %s\n", s)
 	}
 
+	yamlFile, err := ioutil.ReadFile("hw2_alerting_rules.yml")
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	var hw2 HW2AlertRules
-	err = yaml.Unmarshal([]byte(yamlFile), &hw2)
+	err = yaml.Unmarshal(yamlFile, &hw2)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -75,7 +75,7 @@ func main() {
 		}
 	}
 	for k, rules := range hw2Map {
-		fmt.Printf("- %s\n", k)
+		fmt.Printf("- Name: %s\n", k)
 		for alert, expr := range rules {
 			fmt.Printf("  Alert: %s\n", alert)
 			fmt.Printf("  Expr: %s\n", expr)

@@ -1,34 +1,35 @@
-- name: TASMySQLHealth
-  rules:
-  - alert: TASMySQLStatus
-    expr: "_mysql_available <= 0"
-    for: 10m
-    annotations:
-      summary: "The Tanzu Application Service MySQL database is not responding"
-      description: |
-        The MySQL database is used for persistent data storage by several Tanzu Application Service components. Note that this is the SQL database used by system components, not the MySQL service used by applications running on the platform.
-        Tanzu Application Service components that use system databases include the Cloud Controller, Diego Brain, Gorouter, and the User Authorization and Authentication (UAA) server.
+groups:
+  - name: TASMySQLHealth
+    rules:
+    - alert: TASMySQLStatus
+      expr: "_mysql_available <= 0"
+      for: 10m
+      annotations:
+        summary: "The Tanzu Application Service MySQL database is not responding"
+        description: |
+          The MySQL database is used for persistent data storage by several Tanzu Application Service components. Note that this is the SQL database used by system components, not the MySQL service used by applications running on the platform.
+          Tanzu Application Service components that use system databases include the Cloud Controller, Diego Brain, Gorouter, and the User Authorization and Authentication (UAA) server.
 
-        Troubleshooting Steps:
-        Run mysql-diag and check the MySQL Server logs for errors.
-- name: OpsManagerHealth
-  rules:
-  - alert: OpsManagerStatus
-    expr: 'probe_success{instance="<OPS_MANAGER_URL>"} <= 0'
-    for: 10m
-    annotations:
-      summary: "The Ops Manager health check failed"
-      description: |
-        Issues with Ops Manager health should have no direct end user impacts, however it can can impact an operatorâ€™s ability to perform an upgrade or to rescale the Tanzu Application Service platform when necessary.
-- name: BOSHDirectorHealth
-  rules:
-  - alert: BOSHDirectorStatus
-    expr: 'increase(bosh_sli_failures_total{scrape_instance_group="bosh-health-exporter"}[20m]) > 0'
-    for: 20m
-    annotations:
-      summary: "A BOSH Director is down"
-      description: |
-        Losing the BOSH Director does not significantly impact the experience of Tanzu Application Service end users. However, this issue means a loss of resiliency for BOSH-managed VMs.
+          Troubleshooting Steps:
+          Run mysql-diag and check the MySQL Server logs for errors.
+  - name: OpsManagerHealth
+    rules:
+    - alert: OpsManagerStatus
+      expr: 'probe_success{instance="<OPS_MANAGER_URL>"} <= 0'
+      for: 10m
+      annotations:
+        summary: "The Ops Manager health check failed"
+        description: |
+          Issues with Ops Manager health should have no direct end user impacts, however it can can impact an operatorâ€™s ability to perform an upgrade or to rescale the Tanzu Application Service platform when necessary.
+  - name: BOSHDirectorHealth
+    rules:
+    - alert: BOSHDirectorStatus
+      expr: 'increase(bosh_sli_failures_total{scrape_instance_group="bosh-health-exporter"}[20m]) > 0'
+      for: 20m
+      annotations:
+        summary: "A BOSH Director is down"
+        description: |
+          Losing the BOSH Director does not significantly impact the experience of Tanzu Application Service end users. However, this issue means a loss of resiliency for BOSH-managed VMs.
 
-        Troubleshooting Steps:
-        SSH into the `bosh-health-exporter` VM in the "Healthwatch Exporter" deployment, and view logs to find out why the BOSH Director is failing.
+          Troubleshooting Steps:
+          SSH into the `bosh-health-exporter` VM in the "Healthwatch Exporter" deployment, and view logs to find out why the BOSH Director is failing.

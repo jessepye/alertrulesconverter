@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"regexp"
 
 	"gopkg.in/yaml.v2"
 )
@@ -121,4 +122,20 @@ func LoadHW2AlertRules(filename string) (*HW2, error) {
 		return nil, err
 	}
 	return hw2, nil
+}
+
+func ProcessHW2Alert(alert HW1Alert) (*HW2AlertRule, error) {
+	hw2alertRule := &HW2AlertRule{}
+	query := alert.Query
+
+	fmt.Printf(query)
+	// "origin == 'mysql' and name == '/mysql/available' and deployment == 'cf-df12622fdcf2a31199ae' and job == 'mysql,database'"
+	origin, err := regexp.Match("origin == .* and",query)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Printf(origin)
+
+	return hw2alertRule, nil
 }
